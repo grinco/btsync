@@ -1,5 +1,5 @@
 btsync:
-  image: "tutum/btsync"
+  image: "grinco/btsync"
   restart: "on-failure"
   volumes_from:
     - "<service-to-sync>"

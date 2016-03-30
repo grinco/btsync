@@ -4,12 +4,12 @@ import base64
 import os
 import hashlib
 import json
-import tutum
+import dockercloud
 import sys
 
 
 shared_folders=[]
-if (len(sys.argv) > 1):     
+if (len(sys.argv) > 1):
     for v in sys.argv[1:]:
         secret="A"+base64.b32encode(hashlib.sha224(v).hexdigest())[:32]
         folder={'secret':secret,
@@ -21,9 +21,9 @@ if (len(sys.argv) > 1):
                 'use_sync_trash':False}
         shared_folders.append(folder)
 else:
-    cont = tutum.Container.fetch(os.getenv("TUTUM_CONTAINER_API_URI").split('/')[4])
+    cont = dockercloud.Container.fetch(os.getenv("DOCKERCLOUD_CONTAINER_API_URI").split('/')[5])
     for v in cont.bindings:
-        secret="A"+base64.b32encode(hashlib.sha224(os.getenv("TUTUM_SERVICE_API_URI")+v['container_path']).hexdigest())[:32] 
+        secret="A"+base64.b32encode(hashlib.sha224(os.getenv("DOCKERCLOUD_SERVICE_API_URI")+v['container_path']).hexdigest())[:32] 
         folder={'secret':secret,
                 'dir':v['container_path'],
                 'use_relay_server':False,
