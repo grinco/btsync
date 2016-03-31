@@ -27,8 +27,8 @@ else:
         folder={'secret':secret,
                 'dir':v['container_path'],
                 'use_relay_server':False,
-                'use_tracker':False,
-                'use_dht':False,
+                'use_tracker':True,
+                'use_dht':True,
                 'search_lan':True,
                 'use_sync_trash':False}
         shared_folders.append(folder)
