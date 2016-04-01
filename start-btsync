@@ -7,11 +7,16 @@ import json
 import dockercloud
 import sys
 
-
+listen_port='55555'
 shared_folders=[]
 known_hosts=[]
 container_name='Default'
-
+service = dockercloud.Service.fetch(os.getenv("DOCKERCLOUD_SERVICE_API_URI").split('/')[5])
+for container in service.containers:
+	cont = dockercloud.Container.fetch(container.split('/')[5])
+        for env in cont.container_envvars:
+		if (env['key'] == 'DOCKERCLOUD_IP_ADDRESS'):
+			known_hosts.append(env['value'].split('/')[0]+':'+listen_port)
 if (len(sys.argv) > 1):
     for v in sys.argv[1:]:
         secret="A"+base64.b32encode(hashlib.sha224(v).hexdigest())[:32]
@@ -40,7 +45,7 @@ else:
 if(len(cont.name) > 1):
 	container_name=cont.name
 init = {'device_name': container_name,
-        'listening_port': 55555,
+        'listening_port': int(listen_port),
         'storage_path':'/btsync/.sync',
         'check_for_updates':False,
         'use_upnp':False,
