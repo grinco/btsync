@@ -11,9 +11,9 @@ listen_port='55555'
 shared_folders=[]
 known_hosts=[]
 container_name='Default'
-service = dockercloud.Service.fetch(os.getenv("DOCKERCLOUD_SERVICE_API_URI").split('/')[5])
+service = dockercloud.Service.fetch(os.getenv("DOCKERCLOUD_SERVICE_API_URI").split('/')[6])
 for container in service.containers:
-	cont = dockercloud.Container.fetch(container.split('/')[5])
+	cont = dockercloud.Container.fetch(container.split('/')[6])
         for env in cont.container_envvars:
 		if (env['key'] == 'DOCKERCLOUD_IP_ADDRESS'):
 			known_hosts.append(env['value'].split('/')[0]+':'+listen_port)
@@ -30,7 +30,7 @@ if (len(sys.argv) > 1):
                 'known_hosts': known_hosts}
         shared_folders.append(folder)
 else:
-    cont = dockercloud.Container.fetch(os.getenv("DOCKERCLOUD_CONTAINER_API_URI").split('/')[5])
+    cont = dockercloud.Container.fetch(os.getenv("DOCKERCLOUD_CONTAINER_API_URI").split('/')[6])
     for v in cont.bindings:
         secret="A"+base64.b32encode(hashlib.sha224(os.getenv("DOCKERCLOUD_SERVICE_API_URI")+v['container_path']).hexdigest())[:32]
         folder={'secret':secret,
